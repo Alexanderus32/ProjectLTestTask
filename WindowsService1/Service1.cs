@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.NamedPipes;
 using System;
 using System.ServiceProcess;
 using System.Text;
@@ -17,7 +18,6 @@ namespace WindowsService1
 
         protected override void OnStart(string[] args)
         {
-            //Запустить таймер на считівание звука
             var server = new IpcServer<string>("test");
             server.Start<ServerObserver>();
 

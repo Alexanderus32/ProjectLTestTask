@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using AudioSwitcher.AudioApi.CoreAudio;
+using Core;
 using Core.NamedPipes;
 using System;
 using System.Collections.Generic;
@@ -9,17 +10,31 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
-    //Test server and client console app
+    //Test server console app
     class ServerObserver : IPipeStreamObserver<string>
     {
 
         public void OnNext(string value)
         {
-            value = "Client: "+value;
+            Enum.TryParse(value, out CommandConstants commands);
+            switch (commands)
+            {
+                case CommandConstants.GetVolume:
+                    ReturnVolume();
+                    break;
+                default:
+                    break;
+            }
+            bool isVolume = int.TryParse(value, out int volume);
+            if (isVolume)
+            {
+                CoreAudioDevice defaultPlaybackDevice = new CoreAudioController().DefaultPlaybackDevice;
+                defaultPlaybackDevice.Volume = double.Parse(value);
+            }
+            value = "Client: " + value;
             Console.WriteLine(value);
-            //PipeStream.Write(value);
+            PipeStream.Write(value);
         }
-
 
 
         public void OnError(Exception error)
@@ -43,71 +58,33 @@ namespace ConsoleApp1
         {
             PipeStream.Write(value);
         }
-    }
 
-    class ClientObserver : IPipeStreamObserver<string>
-    {
-
-        public void OnNext(string value)
+        public void GetCurrentVolume()
         {
-            value = "Server: " + value;
-            Console.WriteLine(value);
+            PipeStream.Write(CommandConstants.GetVolume.ToString());
         }
 
-        public void OnError(Exception error)
+        public void ReturnVolume()
         {
-            Console.WriteLine(error);
+            CoreAudioDevice defaultPlaybackDevice = new CoreAudioController().DefaultPlaybackDevice;
+            int currentVolume = (int)defaultPlaybackDevice.Volume;
+            PipeStream.Write(currentVolume.ToString());
         }
 
-        public void OnCompleted()
+        public void SetCurrentVolume(int value)
         {
-
-        }
-
-        public PipeStream PipeStream { get; set; }
-
-        public void OnConnected()
-        {
-            PipeStream.Write("Connected");
-        }
-
-        public void Say(string value)
-        {
-            PipeStream.Write(value);
+            throw new NotImplementedException();
         }
     }
+
+    
     class Program
     {
         static void Main(string[] args)
         {
             var server = new IpcServer<string>("test");
+            var serverObserver = new ServerObserver();
             server.Start<ServerObserver>();
-            //var client1 = new IpcClient<string>(".", "test", new ClientObserver());
-            //var client1Worked = client1.Create();
-            //Console.ReadLine();
-            //client1.Observer.Say("hello");
-            //Console.ReadLine();
-            //client1.Observer.Say("qqq");
-            //Console.ReadLine();
-            //Console.ReadLine();
-            //client1Worked.Dispose();
-            //Console.WriteLine("Client1 disposed!");
-            //Console.ReadLine();
-            //var client2 = new IpcClient<string>(".", "test", new ClientObserver()).Create();
-
-            //Console.ReadLine();
-            //client2.Dispose();
-            //Console.WriteLine("Client2 disposed!");
-            //Console.ReadLine();
-            //var client3 = new IpcClient<string>(".", "test", new ClientObserver()).Create();
-
-            //Console.ReadLine();
-            //client3.Dispose();
-            //Console.WriteLine("Client3 disposed!");
-
-            //Console.ReadLine();
-            //server.Stop();
-            //Console.WriteLine("Server stopped!");
             Console.ReadLine();
         }
     }

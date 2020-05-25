@@ -10,7 +10,15 @@ namespace Core.NamedPipes
     public interface IPipeStreamObserver<in T> : IObserver<T>
     {
         PipeStream PipeStream { get; set; }
+
         void OnConnected();
+
         void Say(string value);
+
+        void GetCurrentVolume();
+
+        void SetCurrentVolume(int value);
+
+        void ReturnVolume();
     }
 }

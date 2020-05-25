@@ -76,7 +76,6 @@ namespace Core.NamedPipes
         {
             _running = true;
             _task = _task.ContinueWith(IpcServerPipeCreate<TPipeStreamObserver>);
-            //Observer = new TPipeStreamObserver();
             return _task;
         }
 

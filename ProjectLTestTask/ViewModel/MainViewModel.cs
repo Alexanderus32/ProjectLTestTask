@@ -1,16 +1,20 @@
-using Core;
+using Core.NamedPipes;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ProjectLTestTask.Models;
 using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace ProjectLTestTask.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
-        private Volume currentVolume;
+        private Volume volume;
+
+        private ClientObserver clientObserver;
         private IpcClient<string> client;
         private IDisposable client1Worked;
 
@@ -18,27 +22,31 @@ namespace ProjectLTestTask.ViewModel
 
         public MainViewModel()
         {
-            client = new IpcClient<string>(".", "test", new ClientObserver());
-            client1Worked = client.Create();
             logs = new ObservableCollection<string>();
+            clientObserver = new ClientObserver();
+            clientObserver.ChangeVolume += SetVolume;
+            clientObserver.Notify += LogMessage;
+            client = new IpcClient<string>(".", "test", clientObserver);
+
+            client1Worked = client.Create();
             ApplyCurrentVolumeCommand = new RelayCommand(ApplyCurrentVolumeMethod);
         }
         public ICommand ApplyCurrentVolumeCommand { get; private set; }
 
-        public Volume CurrentVolume
+        public Volume Volume
         {
             get
             {
-                if (this.currentVolume == null)
+                if (this.volume == null)
                 {
                     GetCurrentVolume();
                 }
-                return this.currentVolume;
+                return this.volume;
             }
             set
             {
-                this.currentVolume = value;
-                RaisePropertyChanged("CurrentVolume");
+                this.volume = value;
+                RaisePropertyChanged("Volume");
             }
         }
 
@@ -51,17 +59,29 @@ namespace ProjectLTestTask.ViewModel
         }
         private void ApplyCurrentVolumeMethod()
         {
-            client.Observer.Say(currentVolume.Value.ToString());
-            logs.Add("Apply volume");
-            //Messenger.Default.Send<NotificationMessage>(new NotificationMessage("Apply volume"));
+            client.Observer.SetCurrentVolume(this.volume.LocalValue);
+            client.Observer.GetCurrentVolume();
         }
 
         private void GetCurrentVolume()
         {
-            //Todo get
-            currentVolume = new Volume();
-            logs.Add("Get volume");
-            //Messenger.Default.Send<NotificationMessage>(new NotificationMessage("Get volume"));
+            volume = new Volume();
+            client.Observer.GetCurrentVolume();
+        }
+
+        private void SetVolume(int value)
+        {
+            this.volume.CurrentValue = value;
+            this.volume.LocalValue = value;
+        }
+
+        private void LogMessage(string message)
+        {
+            App.Current.Dispatcher.Invoke((Action)delegate
+            {
+                logs.Add(message);
+            });
+            
         }
     }
 }

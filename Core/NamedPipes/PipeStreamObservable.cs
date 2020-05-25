@@ -306,7 +306,7 @@ namespace Core.NamedPipes
                     value = (T)_formatter.Deserialize(stream);
                     return true;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     value = default(T);
                     return false;

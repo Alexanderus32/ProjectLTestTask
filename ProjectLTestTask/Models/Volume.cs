@@ -9,17 +9,31 @@ namespace ProjectLTestTask.Models
 {
     public class Volume : ObservableObject
     {
-        private int value = 10;
+        private int currentValue;
 
-        public int Value
+        private int localValue;
+
+        public int CurrentValue
         {
             get
             {
-                return this.value;
+                return this.currentValue;
             }
             set
             {
-                Set<int>(() => this.Value, ref this.value, value);
+                Set<int>(() => this.CurrentValue, ref this.currentValue, value);
+            }
+        }
+
+        public int LocalValue
+        {
+            get
+            {
+                return this.localValue;
+            }
+            set
+            {
+                Set<int>(() => this.LocalValue, ref this.localValue, value);
             }
         }
 

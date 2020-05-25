@@ -10,21 +10,30 @@ namespace ProjectLTestTask
 {
     class ClientObserver : IPipeStreamObserver<string>
     {
+        public delegate void VolumeHandler(int volume);
+        public event VolumeHandler ChangeVolume;
+
+        public delegate void NotifyHandler(string value);
+        public event NotifyHandler Notify;
 
         public void OnNext(string value)
         {
+            bool isVolume = int.TryParse(value, out int volume);
+            if(isVolume)
+            {
+                ChangeVolume?.Invoke(volume);
+            }
             value = "Server: " + value;
-            //Console.WriteLine(value);
+            Task.Run(() => Notify?.Invoke(value));
         }
 
         public void OnError(Exception error)
         {
-           // Console.WriteLine(error);
         }
 
         public void OnCompleted()
         {
-
+            PipeStream.Write("Completed");
         }
 
         public PipeStream PipeStream { get; set; }
@@ -37,6 +46,21 @@ namespace ProjectLTestTask
         public void Say(string value)
         {
             PipeStream.Write(value);
+        }
+
+        public void GetCurrentVolume()
+        {
+            PipeStream.Write(CommandConstants.GetVolume.ToString());
+        }
+
+        public void SetCurrentVolume(int value)
+        {
+            PipeStream.Write(value.ToString());
+        }
+
+        public void ReturnVolume()
+        {
+            throw new NotImplementedException();
         }
     }
 }
