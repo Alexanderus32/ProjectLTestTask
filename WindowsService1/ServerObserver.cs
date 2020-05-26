@@ -15,8 +15,16 @@ namespace WindowsService1
 
         public ServerObserver()
         {
-            this.volumeService = new VolumeService();
+            volumeService = new VolumeService();
+            this.volumeService.ChangeVolume += new EventHandler(VolumeChanged);
         }
+
+        private void VolumeChanged(object source, EventArgs e)
+        {
+            Console.WriteLine(this.volumeService.GetCurrentVolume().ToString());
+            // PipeStream.Write(this.volumeService.SystemVolume.ToString());
+        }
+
         public void OnNext(string value)
         {
             Enum.TryParse(value, out CommandConstants commands);
@@ -61,14 +69,14 @@ namespace WindowsService1
             PipeStream.Write(value);
         }
 
-        public void GetCurrentVolume()
+        public void ReturnVolume()
         {
-            PipeStream.Write(CommandConstants.GetVolume.ToString());
+            PipeStream.Write(this.volumeService.GetCurrentVolume().ToString());
         }
 
-        public void ReturnVolume()
-        {   
-            PipeStream.Write(volumeService.GetCurrentVolume().ToString());
+        public void GetCurrentVolume()
+        {
+            throw new NotImplementedException();
         }
 
         public void SetCurrentVolume(int value)

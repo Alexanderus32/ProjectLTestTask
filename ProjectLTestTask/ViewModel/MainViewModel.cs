@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight.Command;
 using ProjectLTestTask.Models;
 using System;
 using System.Collections.ObjectModel;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -60,7 +61,7 @@ namespace ProjectLTestTask.ViewModel
         private void ApplyCurrentVolumeMethod()
         {
             client.Observer.SetCurrentVolume(this.volume.LocalValue);
-            client.Observer.GetCurrentVolume();
+            SetVolume(this.volume.LocalValue);
         }
 
         private void GetCurrentVolume()

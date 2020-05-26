@@ -7,12 +7,26 @@ using System.IO.Pipes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WindowsService1;
 
 namespace ConsoleApp1
 {
     //Test server console app
     class ServerObserver : IPipeStreamObserver<string>
     {
+        IVolumeService volumeService;
+
+        public ServerObserver()
+        {
+            volumeService = new VolumeService();
+            this.volumeService.ChangeVolume += new EventHandler(VolumeChanged);
+        }
+
+        private void VolumeChanged(object source, EventArgs e)
+        {
+            Console.WriteLine(this.volumeService.GetCurrentVolume().ToString());
+           // PipeStream.Write(this.volumeService.SystemVolume.ToString());
+        }
 
         public void OnNext(string value)
         {
@@ -28,8 +42,7 @@ namespace ConsoleApp1
             bool isVolume = int.TryParse(value, out int volume);
             if (isVolume)
             {
-                CoreAudioDevice defaultPlaybackDevice = new CoreAudioController().DefaultPlaybackDevice;
-                defaultPlaybackDevice.Volume = double.Parse(value);
+                volumeService.SetVolume(volume);
             }
             value = "Client: " + value;
             Console.WriteLine(value);
@@ -59,16 +72,14 @@ namespace ConsoleApp1
             PipeStream.Write(value);
         }
 
-        public void GetCurrentVolume()
-        {
-            PipeStream.Write(CommandConstants.GetVolume.ToString());
+        public void ReturnVolume()
+        {   
+            PipeStream.Write(this.volumeService.GetCurrentVolume().ToString());
         }
 
-        public void ReturnVolume()
+        public void GetCurrentVolume()
         {
-            CoreAudioDevice defaultPlaybackDevice = new CoreAudioController().DefaultPlaybackDevice;
-            int currentVolume = (int)defaultPlaybackDevice.Volume;
-            PipeStream.Write(currentVolume.ToString());
+            throw new NotImplementedException();
         }
 
         public void SetCurrentVolume(int value)

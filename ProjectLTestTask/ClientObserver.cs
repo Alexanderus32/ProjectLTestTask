@@ -58,9 +58,5 @@ namespace ProjectLTestTask
             PipeStream.Write(value.ToString());
         }
 
-        public void ReturnVolume()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

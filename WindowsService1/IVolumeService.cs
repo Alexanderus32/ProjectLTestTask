@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace WindowsService1
 {
-    interface IVolumeService
+    public interface IVolumeService
     {
+
+        event EventHandler ChangeVolume;
+
         int GetCurrentVolume();
 
         void SetVolume(int value);

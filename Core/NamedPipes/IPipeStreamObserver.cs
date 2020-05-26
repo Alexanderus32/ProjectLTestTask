@@ -19,6 +19,5 @@ namespace Core.NamedPipes
 
         void SetCurrentVolume(int value);
 
-        void ReturnVolume();
     }
 }
