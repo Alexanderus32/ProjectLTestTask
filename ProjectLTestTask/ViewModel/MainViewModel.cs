@@ -23,6 +23,7 @@ namespace ProjectLTestTask.ViewModel
 
         public MainViewModel()
         {
+            Thread.Sleep(10000);
             logs = new ObservableCollection<string>();
             clientObserver = new ClientObserver();
             clientObserver.ChangeVolume += SetVolume;

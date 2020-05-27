@@ -23,7 +23,11 @@ namespace WindowsService1
         {
             defaultPlaybackDevice = new CoreAudioController().DefaultPlaybackDevice;
             defaultPlaybackDevice.VolumeChanged.Subscribe(observer => {
-                defaultPlaybackDevice.Volume = observer.Volume;
+                try
+                {
+                    defaultPlaybackDevice.Volume = observer.Volume;
+                }
+                catch { }
             });
             this.systemVolume = GetCurrentVolume();
             timerCallback = new TimerCallback(TimerEvent);

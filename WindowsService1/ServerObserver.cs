@@ -13,29 +13,44 @@ namespace WindowsService1
     {
         private readonly IVolumeService volumeService;
 
+        private bool volumeChanged;
+
         public ServerObserver()
         {
             volumeService = new VolumeService();
             this.volumeService.ChangeVolume += new EventHandler(VolumeChanged);
         }
 
+        public void OnNext(string value)
+        {
+            if (value == CommandConstants.GetVolume.ToString())
+            {
+                ReturnVolume();
+            }
+            else if (value == CommandConstants.Default.ToString())
+            {
+                if (!volumeChanged)
+                {
+                    PipeStream.Write(CommandConstants.Default.ToString());
+                }
+                else
+                {
+                    ReturnVolume();
+                }
+            }
+            else
+            {
+                VolumeParse(value);
+            }
+        }
         private void VolumeChanged(object source, EventArgs e)
         {
             Console.WriteLine(this.volumeService.GetCurrentVolume().ToString());
-            // PipeStream.Write(this.volumeService.SystemVolume.ToString());
+            volumeChanged = true;
         }
 
-        public void OnNext(string value)
+        private void VolumeParse(string value)
         {
-            Enum.TryParse(value, out CommandConstants commands);
-            switch (commands)
-            {
-                case CommandConstants.GetVolume:
-                    ReturnVolume();
-                    break;
-                default:
-                    break;
-            }
             bool isVolume = int.TryParse(value, out int volume);
             if (isVolume)
             {
@@ -45,7 +60,6 @@ namespace WindowsService1
             Console.WriteLine(value);
             PipeStream.Write(value);
         }
-
 
         public void OnError(Exception error)
         {
@@ -71,6 +85,7 @@ namespace WindowsService1
 
         public void ReturnVolume()
         {
+            volumeChanged = false;
             PipeStream.Write(this.volumeService.GetCurrentVolume().ToString());
         }
 

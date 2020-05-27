@@ -16,15 +16,35 @@ namespace ProjectLTestTask
         public delegate void NotifyHandler(string value);
         public event NotifyHandler Notify;
 
+        private bool volumeChanged;
+        private int volume;
+
         public void OnNext(string value)
         {
-            bool isVolume = int.TryParse(value, out int volume);
-            if(isVolume)
+            if (value == CommandConstants.Default.ToString())
             {
-                ChangeVolume?.Invoke(volume);
+                if (volumeChanged)
+                {
+                    volumeChanged = false;
+                    PipeStream.Write(volume.ToString());
+                }
+                else
+                {
+                    PipeStream.Write(CommandConstants.Default.ToString());
+                }
             }
-            value = "Server: " + value;
-            Task.Run(() => Notify?.Invoke(value));
+            else
+            {               
+                bool isVolume = int.TryParse(value, out int volume);
+                if (isVolume)
+                {
+                    ChangeVolume?.Invoke(volume);
+                    PipeStream.Write(CommandConstants.Default.ToString());
+                }
+                value = "Server: " + value;
+                Task.Run(() => Notify?.Invoke(value));
+                PipeStream.Write(CommandConstants.Default.ToString());
+            }
         }
 
         public void OnError(Exception error)
@@ -40,7 +60,7 @@ namespace ProjectLTestTask
 
         public void OnConnected()
         {
-            PipeStream.Write("Connected");
+            PipeStream.Write(CommandConstants.Default.ToString());
         }
 
         public void Say(string value)
@@ -55,7 +75,8 @@ namespace ProjectLTestTask
 
         public void SetCurrentVolume(int value)
         {
-            PipeStream.Write(value.ToString());
+            volumeChanged = true;
+            volume = value;
         }
 
     }

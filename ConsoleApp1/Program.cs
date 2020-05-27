@@ -16,6 +16,8 @@ namespace ConsoleApp1
     {
         IVolumeService volumeService;
 
+        private bool volumeChanged;
+
         public ServerObserver()
         {
             volumeService = new VolumeService();
@@ -25,20 +27,34 @@ namespace ConsoleApp1
         private void VolumeChanged(object source, EventArgs e)
         {
             Console.WriteLine(this.volumeService.GetCurrentVolume().ToString());
-           // PipeStream.Write(this.volumeService.SystemVolume.ToString());
+            volumeChanged = true;
         }
 
         public void OnNext(string value)
         {
-            Enum.TryParse(value, out CommandConstants commands);
-            switch (commands)
+            if (value == CommandConstants.GetVolume.ToString())
             {
-                case CommandConstants.GetVolume:
-                    ReturnVolume();
-                    break;
-                default:
-                    break;
+                ReturnVolume();
             }
+            else if (value == CommandConstants.Default.ToString())
+            {
+                if (!volumeChanged)
+                {
+                    PipeStream.Write(CommandConstants.Default.ToString());
+                }
+                else
+                {
+                    ReturnVolume();
+                }
+            }
+            else
+            {
+                VolumeParse(value);  
+            }
+        }
+
+        private void VolumeParse(string value)
+        {
             bool isVolume = int.TryParse(value, out int volume);
             if (isVolume)
             {
@@ -73,7 +89,8 @@ namespace ConsoleApp1
         }
 
         public void ReturnVolume()
-        {   
+        {
+            volumeChanged = false;
             PipeStream.Write(this.volumeService.GetCurrentVolume().ToString());
         }
 
