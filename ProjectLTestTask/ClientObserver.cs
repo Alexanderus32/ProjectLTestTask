@@ -16,51 +16,32 @@ namespace ProjectLTestTask
         public delegate void NotifyHandler(string value);
         public event NotifyHandler Notify;
 
-        private bool volumeChanged;
-        private int volume;
+        public PipeStream PipeStream { get; set; }
 
         public void OnNext(string value)
         {
-            if (value == CommandConstants.Default.ToString())
+            bool isVolume = int.TryParse(value, out int volume);
+            if (isVolume)
             {
-                if (volumeChanged)
-                {
-                    volumeChanged = false;
-                    PipeStream.Write(volume.ToString());
-                }
-                else
-                {
-                    PipeStream.Write(CommandConstants.Default.ToString());
-                }
+                ChangeVolume?.Invoke(volume);
             }
-            else
-            {               
-                bool isVolume = int.TryParse(value, out int volume);
-                if (isVolume)
-                {
-                    ChangeVolume?.Invoke(volume);
-                    PipeStream.Write(CommandConstants.Default.ToString());
-                }
-                value = "Server: " + value;
-                Task.Run(() => Notify?.Invoke(value));
-                PipeStream.Write(CommandConstants.Default.ToString());
-            }
+            value = "Server: " + value;
+            Task.Run(() => Notify?.Invoke(value));
         }
 
         public void OnError(Exception error)
         {
+
         }
 
         public void OnCompleted()
         {
             PipeStream.Write("Completed");
-        }
-
-        public PipeStream PipeStream { get; set; }
+        }       
 
         public void OnConnected()
         {
-            PipeStream.Write(CommandConstants.Default.ToString());
+            PipeStream.Write("Connected");
         }
 
         public void Say(string value)
@@ -68,15 +49,9 @@ namespace ProjectLTestTask
             PipeStream.Write(value);
         }
 
-        public void GetCurrentVolume()
-        {
-            PipeStream.Write(CommandConstants.GetVolume.ToString());
-        }
-
         public void SetCurrentVolume(int value)
         {
-            volumeChanged = true;
-            volume = value;
+            PipeStream.Write(value.ToString());
         }
 
     }

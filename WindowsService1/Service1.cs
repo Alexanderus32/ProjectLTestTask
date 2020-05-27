@@ -23,6 +23,11 @@ namespace WindowsService1
 
         }
 
+        public void OnStartDebug()
+        {
+            OnStart(null);
+        }
+
         protected override void OnStop()
         {
         }

@@ -11,9 +11,9 @@ namespace WindowsService1
 {
     class ServerObserver : IPipeStreamObserver<string>
     {
-        private readonly IVolumeService volumeService;
+        IVolumeService volumeService;
 
-        private bool volumeChanged;
+        public PipeStream PipeStream { get; set; }
 
         public ServerObserver()
         {
@@ -21,35 +21,13 @@ namespace WindowsService1
             this.volumeService.ChangeVolume += new EventHandler(VolumeChanged);
         }
 
-        public void OnNext(string value)
-        {
-            if (value == CommandConstants.GetVolume.ToString())
-            {
-                ReturnVolume();
-            }
-            else if (value == CommandConstants.Default.ToString())
-            {
-                if (!volumeChanged)
-                {
-                    PipeStream.Write(CommandConstants.Default.ToString());
-                }
-                else
-                {
-                    ReturnVolume();
-                }
-            }
-            else
-            {
-                VolumeParse(value);
-            }
-        }
         private void VolumeChanged(object source, EventArgs e)
         {
             Console.WriteLine(this.volumeService.GetCurrentVolume().ToString());
-            volumeChanged = true;
+            PipeStream.Write(this.volumeService.GetCurrentVolume().ToString());
         }
 
-        private void VolumeParse(string value)
+        public void OnNext(string value)
         {
             bool isVolume = int.TryParse(value, out int volume);
             if (isVolume)
@@ -58,8 +36,9 @@ namespace WindowsService1
             }
             value = "Client: " + value;
             Console.WriteLine(value);
-            PipeStream.Write(value);
+            //PipeStream.Write(value);
         }
+
 
         public void OnError(Exception error)
         {
@@ -71,11 +50,10 @@ namespace WindowsService1
 
         }
 
-        public PipeStream PipeStream { get; set; }
-
         public void OnConnected()
         {
             PipeStream.Write("Connected");
+            ReturnVolume();
         }
 
         public void Say(string value)
@@ -85,18 +63,12 @@ namespace WindowsService1
 
         public void ReturnVolume()
         {
-            volumeChanged = false;
             PipeStream.Write(this.volumeService.GetCurrentVolume().ToString());
-        }
-
-        public void GetCurrentVolume()
-        {
-            throw new NotImplementedException();
         }
 
         public void SetCurrentVolume(int value)
         {
-            throw new NotImplementedException();
+            PipeStream.Write(this.volumeService.GetCurrentVolume().ToString());
         }
     }
 }

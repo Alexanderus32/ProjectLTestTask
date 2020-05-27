@@ -40,7 +40,7 @@ namespace ProjectLTestTask.ViewModel
             {
                 if (this.volume == null)
                 {
-                    GetCurrentVolume();
+                    this.volume = new Volume();
                 }
                 return this.volume;
             }
@@ -58,16 +58,11 @@ namespace ProjectLTestTask.ViewModel
                 return this.logs;
             }
         }
+
         private void ApplyCurrentVolumeMethod()
         {
             client.Observer.SetCurrentVolume(this.volume.LocalValue);
             SetVolume(this.volume.LocalValue);
-        }
-
-        private void GetCurrentVolume()
-        {
-            volume = new Volume();
-            client.Observer.GetCurrentVolume();
         }
 
         private void SetVolume(int value)
@@ -81,8 +76,7 @@ namespace ProjectLTestTask.ViewModel
             App.Current.Dispatcher.Invoke((Action)delegate
             {
                 logs.Add(message);
-            });
-            
+            });           
         }
     }
 }
