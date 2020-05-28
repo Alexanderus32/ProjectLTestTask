@@ -15,8 +15,6 @@ namespace WindowsService1
 
         public PipeStream PipeStream { get; set; }
 
-        private PipeStream PipeStream2 { get; set; }
-
         public ServerObserver()
         {
             volumeService = new VolumeService();
@@ -38,8 +36,7 @@ namespace WindowsService1
             }
             value = "Client: " + value;
             Console.WriteLine(value);
-            //PipeStream.Write(value);
-            //ReturnVolume();
+            PipeStream.Write(value);
         }
 
 
@@ -56,7 +53,6 @@ namespace WindowsService1
         public void OnConnected()
         {
             PipeStream.Write("Connected");
-            PipeStream2 = PipeStream;
             ReturnVolume();
         }
 
