@@ -10,7 +10,6 @@ namespace Core.NamedPipes
 {
     public class IpcServer<T>
     {
-        public IPipeStreamObserver<T> Observer { get; set; }
         private bool _running;
         private readonly AutoResetEvent _auto = new AutoResetEvent(false);
         private readonly List<PipeStream> _pipes = new List<PipeStream>();
@@ -30,12 +29,12 @@ namespace Core.NamedPipes
             NamedPipeServerStream pipe;
             var observable = PipeStreamObservable.Create<T>(out pipe, _name, (sender, args) => _auto.Set());
 
-            Observer = new TPipeStreamObserver() { PipeStream = pipe };
+            var observer = new TPipeStreamObserver() { PipeStream = pipe };
             observable.Subscribe(
-                                Observer.OnNext,
+                                observer.OnNext,
                                 ex =>
                                 {
-                                    Observer.OnError(ex);
+                                    observer.OnError(ex);
                                     pipe.Close();
                                     lock (_pipes)
                                     {
@@ -44,7 +43,7 @@ namespace Core.NamedPipes
                                 },
                                 () =>
                                 {
-                                    Observer.OnCompleted();
+                                    observer.OnCompleted();
                                     pipe.Close();
                                     lock (_pipes)
                                     {
@@ -62,8 +61,9 @@ namespace Core.NamedPipes
 
             if (_running)
             {
-                task.ContinueWith(IpcServerPipeCreate<TPipeStreamObserver>);
-                Observer.OnConnected();
+                //error was here
+                //task.ContinueWith(IpcServerPipeCreate<TPipeStreamObserver>);
+                observer.OnConnected();
             }
             else
             {
@@ -76,6 +76,7 @@ namespace Core.NamedPipes
         {
             _running = true;
             _task = _task.ContinueWith(IpcServerPipeCreate<TPipeStreamObserver>);
+
             return _task;
         }
 

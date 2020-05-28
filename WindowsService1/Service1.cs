@@ -19,6 +19,7 @@ namespace WindowsService1
         protected override void OnStart(string[] args)
         {
             var server = new IpcServer<string>("test");
+            var observer = new ServerObserver();
             server.Start<ServerObserver>();
 
         }
