@@ -21,27 +21,28 @@ namespace WindowsService1
 
         public VolumeService()
         {
-            defaultPlaybackDevice = new CoreAudioController().DefaultPlaybackDevice;
-            defaultPlaybackDevice.VolumeChanged.Subscribe(observer => {
-                try
-                {
-                    defaultPlaybackDevice.Volume = observer.Volume;
-                }
-                catch { }
-            });
+            CreateDevice();
             this.systemVolume = GetCurrentVolume();
             timerCallback = new TimerCallback(TimerEvent);
             time = new Timer(timerCallback, null, 0, 3000);
         }
 
+        private void CreateDevice()
+        {
+            this.defaultPlaybackDevice = new CoreAudioController().DefaultPlaybackDevice;
+            this.defaultPlaybackDevice.VolumeChanged.Subscribe(observer => {
+                defaultPlaybackDevice.Volume = observer.Volume;
+            });
+        }
+
         public int GetCurrentVolume()
         {
-            return (int)defaultPlaybackDevice.Volume;
+            return (int)this.defaultPlaybackDevice.Volume;
         }
 
         public void SetVolume(int value)
         {
-            defaultPlaybackDevice.Volume = value;
+            this.defaultPlaybackDevice.Volume = value;
         }
 
         private void TimerEvent(object state)

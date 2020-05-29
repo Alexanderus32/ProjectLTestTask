@@ -17,20 +17,24 @@ namespace ProjectLTestTask.ViewModel
 
         private ClientObserver clientObserver;
         private IpcClient<string> client;
-        private IDisposable client1Worked;
+        private IDisposable clientWorked;
 
         private ObservableCollection<string> logs;
 
         public MainViewModel()
         {
-            logs = new ObservableCollection<string>();
-            clientObserver = new ClientObserver();
-            clientObserver.ChangeVolume += SetVolume;
-            clientObserver.Notify += LogMessage;
-            client = new IpcClient<string>(".", "test", clientObserver);
-
-            client1Worked = client.Create();
+            this.logs = new ObservableCollection<string>();
+            CreateClient();
             ApplyCurrentVolumeCommand = new RelayCommand(ApplyCurrentVolumeMethod);
+        }
+
+        private void CreateClient()
+        {
+            this.clientObserver = new ClientObserver();
+            this.clientObserver.ChangeVolume += SetVolume;
+            this.clientObserver.Notify += LogMessage;
+            this.client = new IpcClient<string>(".", "test", clientObserver);
+            this.clientWorked = client.Create();
         }
         public ICommand ApplyCurrentVolumeCommand { get; private set; }
 
@@ -61,7 +65,7 @@ namespace ProjectLTestTask.ViewModel
 
         private void ApplyCurrentVolumeMethod()
         {
-            client.Observer.SetCurrentVolume(this.volume.LocalValue);
+            this.client.Observer.SetCurrentVolume(this.volume.LocalValue);
             SetVolume(this.volume.LocalValue);
         }
 
@@ -75,7 +79,7 @@ namespace ProjectLTestTask.ViewModel
         {
             App.Current.Dispatcher.Invoke((Action)delegate
             {
-                logs.Add(message);
+                this.logs.Add(message);
             });           
         }
     }

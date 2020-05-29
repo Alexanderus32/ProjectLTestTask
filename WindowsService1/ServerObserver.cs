@@ -17,13 +17,12 @@ namespace WindowsService1
 
         public ServerObserver()
         {
-            volumeService = new VolumeService();
+            this.volumeService = new VolumeService();
             this.volumeService.ChangeVolume += new EventHandler(VolumeChanged);
         }
 
         private void VolumeChanged(object source, EventArgs e)
         {
-            Console.WriteLine(this.volumeService.GetCurrentVolume().ToString());
             PipeStream.Write(this.volumeService.GetCurrentVolume().ToString());
         }
 
@@ -35,7 +34,6 @@ namespace WindowsService1
                 volumeService.SetVolume(volume);
             }
             value = "Client: " + value;
-            Console.WriteLine(value);
             PipeStream.Write(value);
         }
 

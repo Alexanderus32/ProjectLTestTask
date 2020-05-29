@@ -39,14 +39,7 @@ namespace Core.NamedPipes
 
         public static void Write<T>(this PipeStream stream, T type)
         {
-            try
-            {
-                BinaryFormatter.Value.Serialize(stream, type);
-            }
-            catch(Exception ex)
-            {
-
-            }
+            BinaryFormatter.Value.Serialize(stream, type);
         }
 
         public static IObservable<T> Create<T>(out NamedPipeServerStream stream, string pipeName,
