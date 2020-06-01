@@ -78,11 +78,11 @@
     </Compile>
     <Compile Include="IVolumeService.cs" />
     <Compile Include="ServerObserver.cs" />
-    <Compile Include="Service1.cs">
+    <Compile Include="VolumeControlService.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Service1.Designer.cs">
-      <DependentUpon>Service1.cs</DependentUpon>
+    <Compile Include="VolumeControlService.Designer.cs">
+      <DependentUpon>VolumeControlService.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

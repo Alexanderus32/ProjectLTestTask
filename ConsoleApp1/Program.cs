@@ -9,7 +9,7 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            Service1 service = new Service1();
+            VolumeControlService service = new VolumeControlService();
             service.OnStartDebug();
             Console.ReadLine();
         }

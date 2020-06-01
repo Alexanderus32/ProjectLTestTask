@@ -15,27 +15,16 @@ namespace ProjectLTestTask.ViewModel
     {
         private Volume volume;
 
-        private ClientObserver clientObserver;
-        private IpcClient<string> client;
-        private IDisposable clientWorked;
-
         private ObservableCollection<string> logs;
 
         public MainViewModel()
         {
+            App.clientObserver.ChangeVolume += SetVolume;
+            App.clientObserver.Notify += LogMessage;
             this.logs = new ObservableCollection<string>();
-            CreateClient();
             ApplyCurrentVolumeCommand = new RelayCommand(ApplyCurrentVolumeMethod);
         }
-
-        private void CreateClient()
-        {
-            this.clientObserver = new ClientObserver();
-            this.clientObserver.ChangeVolume += SetVolume;
-            this.clientObserver.Notify += LogMessage;
-            this.client = new IpcClient<string>(".", "test", clientObserver);
-            this.clientWorked = client.Create();
-        }
+     
         public ICommand ApplyCurrentVolumeCommand { get; private set; }
 
         public Volume Volume
@@ -50,6 +39,10 @@ namespace ProjectLTestTask.ViewModel
             }
             set
             {
+                if (this.volume == null)
+                {
+                    this.volume = new Volume();
+                }
                 this.volume = value;
                 RaisePropertyChanged("Volume");
             }
@@ -65,14 +58,13 @@ namespace ProjectLTestTask.ViewModel
 
         private void ApplyCurrentVolumeMethod()
         {
-            this.client.Observer.SetCurrentVolume(this.volume.LocalValue);
+            App.clientObserver.VolumeChangeHandler(this.volume.LocalValue);
             SetVolume(this.volume.LocalValue);
         }
 
         private void SetVolume(int value)
         {
-            this.volume.CurrentValue = value;
-            this.volume.LocalValue = value;
+            this.Volume = new Volume { CurrentValue = value, LocalValue = value };
         }
 
         private void LogMessage(string message)

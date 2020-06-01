@@ -167,8 +167,7 @@ namespace Core.NamedPipes
                             T value;
                             if (_handler(_stream, out value))
                                 o.OnNext(value);
-                            else
-                                o.OnCompleted();
+                           
                         }
                     }
                     catch (Exception e)

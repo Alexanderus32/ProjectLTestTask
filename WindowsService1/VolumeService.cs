@@ -9,50 +9,41 @@ namespace WindowsService1
 {
     public class VolumeService : IVolumeService
     {
-        private static Timer time;
-
-        private static TimerCallback timerCallback;
-
         public event EventHandler ChangeVolume;
 
-        private int systemVolume;
-
         private CoreAudioDevice defaultPlaybackDevice;
+
+        private int systemVolume;
 
         public VolumeService()
         {
             CreateDevice();
-            this.systemVolume = GetCurrentVolume();
-            timerCallback = new TimerCallback(TimerEvent);
-            time = new Timer(timerCallback, null, 0, 3000);
+            this.systemVolume = (int)defaultPlaybackDevice.Volume;
         }
 
         private void CreateDevice()
         {
             this.defaultPlaybackDevice = new CoreAudioController().DefaultPlaybackDevice;
-            this.defaultPlaybackDevice.VolumeChanged.Subscribe(observer => {
-                defaultPlaybackDevice.Volume = observer.Volume;
+            this.defaultPlaybackDevice.VolumeChanged.Subscribe(device => {
+                if(systemVolume != device.Volume)
+                {
+                    this.systemVolume = (int)device.Volume;
+                    defaultPlaybackDevice.Volume = systemVolume;
+                    OnChangeVolume(new EventArgs());
+                }
+            
             });
         }
 
         public int GetCurrentVolume()
         {
-            return (int)this.defaultPlaybackDevice.Volume;
+            return this.systemVolume;
         }
 
         public void SetVolume(int value)
         {
             this.defaultPlaybackDevice.Volume = value;
-        }
-
-        private void TimerEvent(object state)
-        {
-            int currentVolume = GetCurrentVolume();
-            if (this.systemVolume != currentVolume)
-            {
-                this.systemVolume = currentVolume;
-                OnChangeVolume(new EventArgs());
-            }
+            systemVolume = value;
         }
 
         private void OnChangeVolume(EventArgs e)

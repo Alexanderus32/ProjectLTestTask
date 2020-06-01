@@ -23,7 +23,7 @@ namespace WindowsService1
 
         private void VolumeChanged(object source, EventArgs e)
         {
-            PipeStream.Write(this.volumeService.GetCurrentVolume().ToString());
+            PipeStream?.Write(this.volumeService.GetCurrentVolume().ToString());
         }
 
         public void OnNext(string value)
@@ -64,7 +64,7 @@ namespace WindowsService1
             PipeStream.Write(this.volumeService.GetCurrentVolume().ToString());
         }
 
-        public void SetCurrentVolume(int value)
+        public void VolumeChangeHandler(int value)
         {
             PipeStream.Write(this.volumeService.GetCurrentVolume().ToString());
         }

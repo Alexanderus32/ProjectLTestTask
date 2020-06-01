@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ProjectLTestTask
 {
-    class ClientObserver : IPipeStreamObserver<string>
+    public class ClientObserver : IPipeStreamObserver<string>
     {
         public delegate void VolumeHandler(int volume);
         public event VolumeHandler ChangeVolume;
@@ -49,7 +49,7 @@ namespace ProjectLTestTask
             PipeStream.Write(value);
         }
 
-        public void SetCurrentVolume(int value)
+        public void VolumeChangeHandler(int value)
         {
             PipeStream.Write(value.ToString());
         }

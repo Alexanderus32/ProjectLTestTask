@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.NamedPipes;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +14,20 @@ namespace ProjectLTestTask
     /// </summary>
     public partial class App : Application
     {
+        public static ClientObserver clientObserver;
+        private IpcClient<string> client;
+        private IDisposable clientWorked;
+
+        public App()
+        {
+            CreateClient();
+        }
+
+        private void CreateClient()
+        {
+            clientObserver = new ClientObserver();
+            this.client = new IpcClient<string>(".", "test", clientObserver);
+            this.clientWorked = client.Create();
+        }
     }
 }

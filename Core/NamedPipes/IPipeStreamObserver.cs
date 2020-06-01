@@ -15,7 +15,7 @@ namespace Core.NamedPipes
 
         void Say(string value);
 
-        void SetCurrentVolume(int value);
+        void VolumeChangeHandler(int value);
 
     }
 }

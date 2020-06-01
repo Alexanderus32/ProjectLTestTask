@@ -14,7 +14,6 @@ namespace ProjectLTestTask.ViewModel
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
             SimpleIoc.Default.Register<MainViewModel>();
-            Messenger.Default.Register<NotificationMessage>(this, NotifyUserMethod);
         }
 
         public MainViewModel Main
@@ -25,14 +24,8 @@ namespace ProjectLTestTask.ViewModel
             }
         }
 
-        private void NotifyUserMethod(NotificationMessage message)
-        {
-            MessageBox.Show(message.Notification);
-        }
-
         public static void Cleanup()
         {
-            // TODO Clear the ViewModels
             SimpleIoc.Default.Unregister<MainViewModel>();
         }
     }
