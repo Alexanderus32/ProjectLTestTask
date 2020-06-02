@@ -1,5 +1,6 @@
 
 using CommonServiceLocator;
+using Core.NamedPipes;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Messaging;
@@ -10,10 +11,17 @@ namespace ProjectLTestTask.ViewModel
    
     public class ViewModelLocator
     {
+        public static ClientObserver clientObserver;
+        private IpcClient<string> client;
+
         public ViewModelLocator()
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
             SimpleIoc.Default.Register<MainViewModel>();
+            
+            clientObserver = new ClientObserver();
+            client = new IpcClient<string>(".", "test", clientObserver);
+            client.Create();
         }
 
         public MainViewModel Main

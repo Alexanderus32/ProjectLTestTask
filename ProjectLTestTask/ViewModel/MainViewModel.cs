@@ -19,9 +19,9 @@ namespace ProjectLTestTask.ViewModel
 
         public MainViewModel()
         {
-            App.clientObserver.ChangeVolume += SetVolume;
-            App.clientObserver.Notify += LogMessage;
-            App.client.Create();
+            ViewModelLocator.clientObserver.ChangeVolume += SetVolume;
+            ViewModelLocator.clientObserver.Notify += LogMessage;
+            
             this.logs = new ObservableCollection<string>();
             ApplyCurrentVolumeCommand = new RelayCommand(ApplyCurrentVolumeMethod);
         }
@@ -59,7 +59,7 @@ namespace ProjectLTestTask.ViewModel
 
         private void ApplyCurrentVolumeMethod()
         {
-            App.clientObserver.VolumeChangeHandler(this.volume.LocalValue);
+            ViewModelLocator.clientObserver.VolumeChangeHandler(this.volume.LocalValue);
             SetVolume(this.volume.LocalValue);
         }
 

@@ -14,19 +14,6 @@ namespace ProjectLTestTask
     /// </summary>
     public partial class App : Application
     {
-        public static ClientObserver clientObserver;
-        public static IpcClient<string> client;
-
-        public App()
-        {
-            CreateClient();
-        }
-
-        private void CreateClient()
-        {
-            clientObserver = new ClientObserver();
-            client = new IpcClient<string>(".", "test", clientObserver);
-        }
 
     }
 }
