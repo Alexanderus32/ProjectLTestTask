@@ -15,8 +15,7 @@ namespace ProjectLTestTask
     public partial class App : Application
     {
         public static ClientObserver clientObserver;
-        private IpcClient<string> client;
-        private IDisposable clientWorked;
+        public static IpcClient<string> client;
 
         public App()
         {
@@ -26,8 +25,8 @@ namespace ProjectLTestTask
         private void CreateClient()
         {
             clientObserver = new ClientObserver();
-            this.client = new IpcClient<string>(".", "test", clientObserver);
-            this.clientWorked = client.Create();
+            client = new IpcClient<string>(".", "test", clientObserver);
         }
+
     }
 }

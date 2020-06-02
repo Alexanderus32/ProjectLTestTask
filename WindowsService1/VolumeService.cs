@@ -30,8 +30,8 @@ namespace WindowsService1
                     this.systemVolume = (int)device.Volume;
                     defaultPlaybackDevice.Volume = systemVolume;
                     OnChangeVolume(new EventArgs());
+                    
                 }
-            
             });
         }
 

@@ -21,6 +21,7 @@ namespace ProjectLTestTask.ViewModel
         {
             App.clientObserver.ChangeVolume += SetVolume;
             App.clientObserver.Notify += LogMessage;
+            App.client.Create();
             this.logs = new ObservableCollection<string>();
             ApplyCurrentVolumeCommand = new RelayCommand(ApplyCurrentVolumeMethod);
         }
