@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProjectLTestTask.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,17 @@ namespace ProjectLTestTask
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        public void Dispose()
+        {
+            ViewModelLocator.Cleanup();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            Dispose();
+            base.OnClosed(e);
         }
     }
 }
