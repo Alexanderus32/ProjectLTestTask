@@ -1,3 +1,4 @@
+using CommonServiceLocator;
 using Core.NamedPipes;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -17,11 +18,16 @@ namespace ProjectLTestTask.ViewModel
 
         private ObservableCollection<string> logs;
 
+        private IClientOberver client;
+
         public MainViewModel()
         {
-            ViewModelLocator.clientObserver.ChangeVolume += SetVolume;
-            ViewModelLocator.clientObserver.Notify += LogMessage;
-            
+            this.client = ServiceLocator.Current.GetInstance<IClientOberver>();
+            this.client.ChangeVolume += new EventHandler<ValueEventArgs<int>>(SetVolume);
+            this.client.Notify += new EventHandler<ValueEventArgs<string>>(LogMessage);
+            //ViewModelLocator.clientObserver.ChangeVolume += SetVolume;
+            // ViewModelLocator.clientObserver.Notify += LogMessage;
+
             this.logs = new ObservableCollection<string>();
             ApplyCurrentVolumeCommand = new RelayCommand(ApplyCurrentVolumeMethod);
         }
@@ -59,20 +65,20 @@ namespace ProjectLTestTask.ViewModel
 
         private void ApplyCurrentVolumeMethod()
         {
-            ViewModelLocator.clientObserver.VolumeChangeHandler(this.volume.LocalValue);
-            SetVolume(this.volume.LocalValue);
+            client.VolumeChangeHandler(this.volume.LocalValue);
+            SetVolume(null, new ValueEventArgs<int>(this.volume.LocalValue));
         }
 
-        private void SetVolume(int value)
+        private void SetVolume(object source, ValueEventArgs<int> args)
         {
-            this.Volume = new Volume { CurrentValue = value, LocalValue = value };
+            this.Volume = new Volume { CurrentValue = args.Value, LocalValue = args.Value };
         }
 
-        private void LogMessage(string message)
+        private void LogMessage(object source, ValueEventArgs<string> args)
         {
             App.Current.Dispatcher.Invoke((Action)delegate
             {
-                this.logs.Add(message);
+                this.logs.Add(args.Value);
             });           
         }
     }
