@@ -1,6 +1,4 @@
-﻿using CommonServiceLocator;
-using Core;
-using ProjectLTestTask.ViewModel;
+﻿using ProjectLTestTask.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,12 +35,6 @@ namespace ProjectLTestTask
         {
             Dispose();
             base.OnClosed(e);
-        }
-
-        protected override void OnContentRendered(EventArgs e)
-        {
-            base.OnContentRendered(e);
-            ServiceLocator.Current.GetInstance<IClientOberver>().Say(CommandConstants.GetVolume.ToString());
         }
     }
 }
