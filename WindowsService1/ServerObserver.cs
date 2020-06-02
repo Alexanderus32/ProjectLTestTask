@@ -1,40 +1,31 @@
 ﻿using AudioSwitcher.AudioApi.CoreAudio;
+using Core;
 using Core.NamedPipes;
 using System;
 using System.Collections.Generic;
 using System.IO.Pipes;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WindowsService1
 {
     class ServerObserver : IPipeStreamObserver<string>
     {
-        IVolumeService volumeService;
+        private readonly ICommander commander;
 
         public PipeStream PipeStream { get; set; }
 
         public ServerObserver()
         {
-            this.volumeService = new VolumeService();
-            this.volumeService.ChangeVolume += new EventHandler(VolumeChanged);
-        }
-
-        private void VolumeChanged(object source, EventArgs e)
-        {
-            PipeStream?.Write(this.volumeService.GetCurrentVolume().ToString());
+            this.commander = IoCRegister.Container.GetInstance<ICommander>();
         }
 
         public void OnNext(string value)
         {
-            bool isVolume = int.TryParse(value, out int volume);
-            if (isVolume)
+            PipeStream.Write("Client: " + value);
+            var result = commander.Execute(value);
+            if (result != null)
             {
-                volumeService.SetVolume(volume);
+                PipeStream.Write(result);
             }
-            value = "Client: " + value;
-            PipeStream.Write(value);
         }
 
 
@@ -51,7 +42,7 @@ namespace WindowsService1
         public void OnConnected()
         {
             PipeStream.Write("Connected");
-            ReturnVolume();
+            //ReturnVolume();
         }
 
         public void Say(string value)
@@ -59,14 +50,14 @@ namespace WindowsService1
             PipeStream.Write(value);
         }
 
-        public void ReturnVolume()
-        {
-            PipeStream.Write(this.volumeService.GetCurrentVolume().ToString());
-        }
+        //public void ReturnVolume()
+        //{
+        //  //  PipeStream.Write(this.volumeService.GetCurrentVolume().ToString());
+        //}
 
-        public void VolumeChangeHandler(int value)
-        {
-            PipeStream.Write(this.volumeService.GetCurrentVolume().ToString());
-        }
+        //public void VolumeChangeHandler(int value)
+        //{
+        //  //  PipeStream.Write(this.volumeService.GetCurrentVolume().ToString());
+        //}
     }
 }

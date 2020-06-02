@@ -57,6 +57,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandConstants.cs" />
     <Compile Include="NamedPipes\IIterator.cs" />
     <Compile Include="NamedPipes\IpcClient.cs" />
     <Compile Include="NamedPipes\IpcServer.cs" />

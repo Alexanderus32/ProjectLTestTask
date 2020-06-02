@@ -13,5 +13,7 @@ namespace ProjectLTestTask
 
         event EventHandler<ValueEventArgs<string>> Notify;
 
+        void VolumeChangeHandler(int value);
+
     }
 }
