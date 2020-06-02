@@ -62,9 +62,9 @@
       <Project>{BD330470-F9B8-42CD-883A-A8D8CA25573B}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WindowsService1\DeviceControlService.csproj">
+    <ProjectReference Include="..\WindowsService1\WindowsService1.csproj">
       <Project>{D2F25122-45C3-4B44-BCF0-C20F8C7EDB02}</Project>
-      <Name>DeviceControlService</Name>
+      <Name>WindowsService1</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
