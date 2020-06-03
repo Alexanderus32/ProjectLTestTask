@@ -83,8 +83,10 @@
     <Compile Include="Installer1.Designer.cs">
       <DependentUpon>Installer1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Interfaces\ISend.cs" />
     <Compile Include="Interfaces\IVolumeService.cs" />
     <Compile Include="IoCRegister.cs" />
+    <Compile Include="Sender.cs" />
     <Compile Include="ServerObserver.cs" />
     <Compile Include="VolumeControlService.cs">
       <SubType>Component</SubType>

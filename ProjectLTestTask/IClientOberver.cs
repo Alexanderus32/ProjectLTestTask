@@ -1,4 +1,5 @@
-﻿using Core.NamedPipes;
+﻿using Core;
+using Core.NamedPipes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,8 @@ namespace ProjectLTestTask
         event EventHandler<ValueEventArgs<string>> Notify;
 
         void VolumeChangeHandler(int value);
+
+        void Say(string value);
 
     }
 }

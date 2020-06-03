@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace WindowsService1
 {
     public interface IVolumeService
     {
-        event EventHandler ChangeVolume;
+        event EventHandler<ValueEventArgs<string>> ChangeVolume;
 
         int GetCurrentVolume();
 

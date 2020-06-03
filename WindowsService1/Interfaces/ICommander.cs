@@ -8,6 +8,6 @@ namespace WindowsService1
 {
     interface ICommander
     {
-        string Execute(string args);
+        void Execute(string args);
     }
 }

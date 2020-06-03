@@ -11,8 +11,11 @@ namespace WindowsService1
     {
         private IReadOnlyList<Command> commands;
 
-        public Commander()
+        private readonly ISend sender;
+
+        public Commander(ISend sender)
         {
+            this.sender = sender;
             InitializeCommands();
         }
 
@@ -23,16 +26,22 @@ namespace WindowsService1
             };
         }
 
-        public string Execute(string args)
+        public void Execute(string args)
         {
             foreach (var command in commands)
             {
                 if (command.IsThisCommand(args))
                 {
-                    return command.Execute(args);
+                    string result = command.Execute(args);
+
+                    if (result != null)
+                    {
+                        this.sender.Send(result);
+                    }
+
+                    return;
                 }
             }
-            return null;
         }
     }
 }

@@ -16,11 +16,12 @@ namespace WindowsService1
         {
             Container = new Container();
         }
+
         public static void Register()
         {
             Container.Register<ICommander, Commander>(Lifestyle.Singleton);
             Container.Register<IVolumeService, VolumeService>(Lifestyle.Singleton);
-            Container.Register<ServerObserver>(Lifestyle.Singleton);
+            Container.Register<ISend, Sender>(Lifestyle.Singleton);
             Container.Verify();
         }
     }

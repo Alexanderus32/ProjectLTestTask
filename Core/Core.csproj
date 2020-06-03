@@ -64,6 +64,7 @@
     <Compile Include="NamedPipes\IPipeStreamObserver.cs" />
     <Compile Include="NamedPipes\PipeStreamObservable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ValueEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

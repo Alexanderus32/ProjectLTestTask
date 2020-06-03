@@ -4,6 +4,7 @@ using Core.NamedPipes;
 using System;
 using System.Collections.Generic;
 using System.IO.Pipes;
+using WindowsService1.Interfaces;
 
 namespace WindowsService1
 {
@@ -11,21 +12,20 @@ namespace WindowsService1
     {
         private readonly ICommander commander;
 
+        private readonly ISend sender;
+
         public PipeStream PipeStream { get; set; }
 
         public ServerObserver()
         {
             this.commander = IoCRegister.Container.GetInstance<ICommander>();
+            this.sender = IoCRegister.Container.GetInstance<ISend>();
         }
 
         public void OnNext(string value)
         {
-            PipeStream.Write("Client: " + value);
-            var result = commander.Execute(value);
-            if (result != null)
-            {
-                PipeStream.Write(result);
-            }
+            this.PipeStream.Write("Client: " + value);
+            this.commander.Execute(value);
         }
 
 
@@ -41,23 +41,9 @@ namespace WindowsService1
 
         public void OnConnected()
         {
-            PipeStream.Write("Connected");
-            //ReturnVolume();
+            this.sender.PipeStream = PipeStream;
+            this.sender.Send("Connected");
         }
 
-        public void Say(string value)
-        {
-            PipeStream.Write(value);
-        }
-
-        //public void ReturnVolume()
-        //{
-        //  //  PipeStream.Write(this.volumeService.GetCurrentVolume().ToString());
-        //}
-
-        //public void VolumeChangeHandler(int value)
-        //{
-        //  //  PipeStream.Write(this.volumeService.GetCurrentVolume().ToString());
-        //}
     }
 }

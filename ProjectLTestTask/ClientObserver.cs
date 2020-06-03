@@ -1,4 +1,5 @@
-﻿using Core.NamedPipes;
+﻿using Core;
+using Core.NamedPipes;
 using System;
 using System.Collections.Generic;
 using System.IO.Pipes;
