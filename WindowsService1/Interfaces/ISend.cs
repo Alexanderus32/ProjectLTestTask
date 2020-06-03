@@ -5,17 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.NamedPipes
+namespace WindowsService1.Interfaces
 {
-    public interface IPipeStreamObserver<in T> : IObserver<T>
+    interface ISend
     {
         PipeStream PipeStream { get; set; }
 
-        void OnConnected();
-
-        //void Say(string value);
-
-        //void VolumeChangeHandler(int value);
-
+        void Send(string message);
     }
 }

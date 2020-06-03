@@ -1,4 +1,5 @@
-﻿using Core.NamedPipes;
+﻿using Core;
+using Core.NamedPipes;
 using System;
 using System.Collections.Generic;
 using System.IO.Pipes;
@@ -8,25 +9,35 @@ using System.Threading.Tasks;
 
 namespace ProjectLTestTask
 {
-    public class ClientObserver : IPipeStreamObserver<string>
+    public class ClientObserver : IClientOberver
     {
-        public delegate void VolumeHandler(int volume);
-        public event VolumeHandler ChangeVolume;
-
-        public delegate void NotifyHandler(string value);
-        public event NotifyHandler Notify;
 
         public PipeStream PipeStream { get; set; }
+
+        public event EventHandler<ValueEventArgs<int>> ChangeVolume;
+
+        public event EventHandler<ValueEventArgs<string>> Notify;
+
+        protected virtual void OnChangeVolume(ValueEventArgs<int> e)
+        {
+            ChangeVolume?.Invoke(this, e);
+        }
+
+        protected virtual void OnNotify(ValueEventArgs<string> e)
+        {
+            Notify?.Invoke(this, e);
+        }
+
 
         public void OnNext(string value)
         {
             bool isVolume = int.TryParse(value, out int volume);
             if (isVolume)
             {
-                ChangeVolume?.Invoke(volume);
+                OnChangeVolume(new ValueEventArgs<int>(volume));
             }
             value = "Server: " + value;
-            Task.Run(() => Notify?.Invoke(value));
+            Task.Run(() => OnNotify(new ValueEventArgs<string>(value)));
         }
 
         public void OnError(Exception error)

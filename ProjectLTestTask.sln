@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectLTestTask", "ProjectLTestTask\ProjectLTestTask.csproj", "{EA6AEB19-6992-4541-8D69-C9B8D5128E3D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFDeviceControlClient", "ProjectLTestTask\WPFDeviceControlClient.csproj", "{EA6AEB19-6992-4541-8D69-C9B8D5128E3D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{BD330470-F9B8-42CD-883A-A8D8CA25573B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{9123598C-FDF1-446D-B88D-CF6F5ED094C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsService1", "WindowsService1\WindowsService1.csproj", "{D2F25122-45C3-4B44-BCF0-C20F8C7EDB02}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceControlService", "WindowsService1\DeviceControlService.csproj", "{D2F25122-45C3-4B44-BCF0-C20F8C7EDB02}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConnectedUSBDevices", "TestConnectedUSBDevices\TestConnectedUSBDevices.csproj", "{2D8A2180-471E-4D9C-8E5F-2A581FBA069D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{D2F25122-45C3-4B44-BCF0-C20F8C7EDB02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2F25122-45C3-4B44-BCF0-C20F8C7EDB02}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2F25122-45C3-4B44-BCF0-C20F8C7EDB02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D8A2180-471E-4D9C-8E5F-2A581FBA069D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D8A2180-471E-4D9C-8E5F-2A581FBA069D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D8A2180-471E-4D9C-8E5F-2A581FBA069D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D8A2180-471E-4D9C-8E5F-2A581FBA069D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
