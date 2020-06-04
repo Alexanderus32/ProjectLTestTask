@@ -6,17 +6,43 @@
         xmlns:local="clr-namespace:ProjectLTestTask"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid DataContext="{Binding Main, Source={StaticResource Locator}}">
-        <Label  HorizontalAlignment="Left" Margin="155,91,0,0" VerticalAlignment="Top" Height="29" Width="60"
-               Content="{Binding Volume.CurrentValue}"/>
-        <Label  HorizontalAlignment="Left" Margin="155,130,0,0" VerticalAlignment="Top" Height="29" Width="60"
-               Content="{Binding ElementName=Time, Path=Value}" />
-        <Slider Name="Time" Value="{Binding Volume.LocalValue}" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="0" HorizontalAlignment="Left" Margin="32,169,0,0" VerticalAlignment="Top" Height="67" Width="399" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True"/>
-        <Button Content="Apply" HorizontalAlignment="Left" Margin="32,213,0,0" VerticalAlignment="Top" Width="111" Height="36"
-                Command="{Binding ApplyCurrentVolumeCommand}" RenderTransformOrigin="0.475,-0.372"/>
-        <ListBox HorizontalAlignment="Left" Height="420" Margin="571,0,0,0" VerticalAlignment="Top" Width="213"
-                 ItemsSource="{Binding Logs}"/>
-        <Label Content="Системный звук:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="32,91,0,0"/>
-        <Label Content="Ползунок:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="32,130,0,0"/>
-    </Grid>
+    <TabControl x:Name="tabs">
+        <TabItem x:Name="audioTab">
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Ellipse Height="10" Width="10" Fill="Black" />
+                    <TextBlock Margin="3">Audio</TextBlock>
+                </StackPanel>
+            </TabItem.Header>
+            <TabItem.Content>
+                <Grid DataContext="{Binding Main, Source={StaticResource Locator}}">
+                    <Label  HorizontalAlignment="Left" Margin="155,91,0,0" VerticalAlignment="Top" Height="29" Width="60"
+                           Content="{Binding Volume.CurrentValue}"/>
+                    <Label  HorizontalAlignment="Left" Margin="155,130,0,0" VerticalAlignment="Top" Height="29" Width="60"
+                           Content="{Binding ElementName=Time, Path=Value}" />
+                    <Slider Name="Time" Value="{Binding Volume.LocalValue}" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="0" HorizontalAlignment="Left" Margin="32,169,0,0" VerticalAlignment="Top" Height="67" Width="399" Maximum="100" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                    <Button Content="Apply" HorizontalAlignment="Left" Margin="32,213,0,0" VerticalAlignment="Top" Width="111" Height="36"
+                            Command="{Binding ApplyCurrentVolumeCommand}" RenderTransformOrigin="0.475,-0.372"/>
+                    <ListBox HorizontalAlignment="Left" Height="420" Margin="571,0,0,0" VerticalAlignment="Top" Width="213"
+                             ItemsSource="{Binding Logs}"/>
+                    <Label Content="Системный звук:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="32,91,0,0"/>
+                    <Label Content="Ползунок:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="32,130,0,0"/>
+                </Grid>
+            </TabItem.Content>
+        </TabItem>
+        <TabItem x:Name="deviceTab">
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Ellipse Height="10" Width="10" Fill="Black" />
+                    <TextBlock Margin="3">Devices</TextBlock>
+                </StackPanel>
+            </TabItem.Header>
+            <TabItem.Content>
+                <StackPanel>
+                    <Label>Device 1</Label>
+                    <Label>Device 2</Label>
+                </StackPanel>
+            </TabItem.Content>
+        </TabItem>
+    </TabControl>
 </Window>

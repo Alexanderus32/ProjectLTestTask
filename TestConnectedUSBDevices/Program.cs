@@ -29,14 +29,14 @@ namespace TestConnectedUSBDevices
             using (var searcher = new ManagementObjectSearcher("root\\CIMV2",
             @"SELECT * FROM Win32_PnPEntity where DeviceID Like ""USB%"""))
                 collection = searcher.Get();
-            foreach (var device in collection)
-            {
-                foreach (var item2 in device.Properties)
-                {
-                    Console.WriteLine(item2.Name+":  "+item2.Value);
-                }
-            }
-            Console.ReadLine();
+            //foreach (var device in collection)
+            //{
+            //    foreach (var item2 in device.Properties)
+            //    {
+            //        Console.WriteLine(item2.Name+":  "+item2.Value);
+            //    }
+            //}
+            //Console.ReadLine();
             foreach (var device in collection)
             {
                 devices.Add(new USBDeviceInfo(
