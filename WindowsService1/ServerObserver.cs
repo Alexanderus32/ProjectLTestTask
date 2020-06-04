@@ -1,10 +1,10 @@
 ﻿using AudioSwitcher.AudioApi.CoreAudio;
 using Core;
+using Core.Interfaces;
 using Core.NamedPipes;
 using System;
 using System.Collections.Generic;
 using System.IO.Pipes;
-using WindowsService1.Interfaces;
 
 namespace WindowsService1
 {
@@ -24,7 +24,6 @@ namespace WindowsService1
 
         public void OnNext(string value)
         {
-            //this.sender.Send("Client: " + value);
             this.commander.Execute(value);
         }
 
@@ -42,7 +41,7 @@ namespace WindowsService1
         public void OnConnected()
         {
             this.sender.PipeStream = PipeStream;
-            this.sender.Send("Connected");
+            this.sender.Connected();
         }
 
     }

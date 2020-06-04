@@ -9,6 +9,7 @@ namespace Core
     public enum ServiceType
     {
         AudioService,
+        LogSevice,
         DeviceService
     }
 }

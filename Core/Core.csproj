@@ -79,9 +79,14 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AudioMessage.cs" />
+    <Compile Include="Interfaces\ICommand.cs" />
+    <Compile Include="Interfaces\ICommander.cs" />
+    <Compile Include="Interfaces\ISend.cs" />
+    <Compile Include="Interfaces\IVolumeService.cs" />
+    <Compile Include="Messages\AudioMessage.cs" />
     <Compile Include="CommandConstants.cs" />
-    <Compile Include="IMessage.cs" />
+    <Compile Include="Interfaces\IMessage.cs" />
+    <Compile Include="Messages\LogMessage.cs" />
     <Compile Include="MessageConverter.cs" />
     <Compile Include="NamedPipes\IIterator.cs" />
     <Compile Include="NamedPipes\IpcClient.cs" />

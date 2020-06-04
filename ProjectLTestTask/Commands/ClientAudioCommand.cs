@@ -1,11 +1,7 @@
 ﻿using Core;
-using System;
-using System.Collections.Generic;
+using Core.Interfaces;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WindowsService1;
-using WindowsService1.Interfaces;
+
 
 namespace ProjectLTestTask.Commands
 {

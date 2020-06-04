@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WindowsService1.Interfaces
+namespace Core.Interfaces
 {
     public interface ICommand
     {

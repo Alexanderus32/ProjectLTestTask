@@ -104,8 +104,9 @@
     <Compile Include="ClientCommander.cs" />
     <Compile Include="ClientObserver.cs" />
     <Compile Include="Commands\ClientAudioCommand.cs" />
-    <Compile Include="IClientOberver.cs" />
+    <Compile Include="INotificator.cs" />
     <Compile Include="Models\Volume.cs" />
+    <Compile Include="Notificator.cs" />
     <Compile Include="Services\ClientAudioService.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />

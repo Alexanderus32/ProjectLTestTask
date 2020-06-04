@@ -1,10 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using Core.Interfaces;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core
 {
@@ -20,6 +18,8 @@ namespace Core
             JObject jo = JObject.Load(reader);
             if (jo["Type"].Value<int>() == 0)
                 return jo.ToObject<AudioMessage>(serializer);
+            else if (jo["Type"].Value<int>() == 1)
+                return jo.ToObject<LogMessage>(serializer);
             return null;
         }
 

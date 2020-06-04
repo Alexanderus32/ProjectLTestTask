@@ -97,16 +97,12 @@
   <ItemGroup>
     <Compile Include="Commands\AudioCommand.cs" />
     <Compile Include="Commander.cs" />
-    <Compile Include="Interfaces\ICommand.cs" />
-    <Compile Include="Interfaces\ICommander.cs" />
     <Compile Include="Installer1.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Installer1.Designer.cs">
       <DependentUpon>Installer1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Interfaces\ISend.cs" />
-    <Compile Include="Interfaces\IVolumeService.cs" />
     <Compile Include="IoCRegister.cs" />
     <Compile Include="Sender.cs" />
     <Compile Include="ServerObserver.cs" />
@@ -130,5 +126,6 @@
       <Name>Core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,11 +1,9 @@
 ﻿using Core;
+using Core.Interfaces;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WindowsService1.Interfaces;
 
 namespace WindowsService1
 {

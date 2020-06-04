@@ -1,14 +1,11 @@
 ﻿using CommonServiceLocator;
 using Core;
+using Core.Interfaces;
 using Newtonsoft.Json;
 using ProjectLTestTask.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WindowsService1;
-using WindowsService1.Interfaces;
 
 namespace ProjectLTestTask
 {
@@ -18,16 +15,19 @@ namespace ProjectLTestTask
 
         private readonly ISend sender;
 
-        public ClientCommander(ISend sender)
+        private readonly INotificator notificator;
+
+        public ClientCommander(ISend sender, INotificator notificator)
         {
             this.sender = sender;
+            this.notificator = notificator;
             InitializeCommands();
         }
 
         private void InitializeCommands()
         {
             commands = new List<ICommand> {
-                new ClientAudioCommand(ServiceLocator.Current.GetInstance<IVolumeService>())
+                new ClientAudioCommand(ServiceLocator.Current.GetInstance<IVolumeService>()),
             };
         }
 
@@ -42,8 +42,13 @@ namespace ProjectLTestTask
                 {
                     this.sender.Send(result);
                 }
+                string serverMessage = $"Server:\n Type:{message.Type}\n";
+                foreach (var item in message.Payload)
+                {
+                    serverMessage += $"{item.Key}: {item.Value}\n";
+                }
+                this.notificator.Log(serverMessage);
             }
-
         }
     }
 }

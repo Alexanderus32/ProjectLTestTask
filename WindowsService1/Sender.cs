@@ -1,13 +1,10 @@
 ﻿using Core;
+using Core.Interfaces;
 using Core.NamedPipes;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO.Pipes;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WindowsService1.Interfaces;
 
 namespace WindowsService1
 {
@@ -27,6 +24,13 @@ namespace WindowsService1
         public void Send(string message)
         {
             PipeStream?.Write(message);
+        }
+
+        public void Connected()
+        {
+            var dictionary = new Dictionary<string, string> { { "Message", "Connected" } };
+            string json = MessageConverter.CreateJson(new LogMessage(), dictionary);
+            Send(json);
         }
 
         private void VolumeChanged(object source, ValueEventArgs<int> e)

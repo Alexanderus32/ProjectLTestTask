@@ -1,9 +1,8 @@
 ﻿using Core;
 using System.Text.Json;
 using System.Collections.Generic;
-using WindowsService1.Interfaces;
-using Newtonsoft.Json;
 using System.Linq;
+using Core.Interfaces;
 
 namespace WindowsService1
 {
@@ -35,7 +34,10 @@ namespace WindowsService1
             {
                 int.TryParse(command.Payload.FirstOrDefault(x=>x.Key == "Volume").Value, out int volume);
                 this.volumeService.SetVolume(volume);
-                return null;
+
+                var dictionary = new Dictionary<string, string> { { "Message", "Ok" } };
+                string json = MessageConverter.CreateJson(new LogMessage(), dictionary);
+                return json;
             }
         }
     }
