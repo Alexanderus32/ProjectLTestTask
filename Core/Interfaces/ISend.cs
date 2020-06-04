@@ -5,12 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WindowsService1.Interfaces
+namespace Core.Interfaces
 {
-    interface ISend
+    public interface ISend
     {
         PipeStream PipeStream { get; set; }
 
         void Send(string message);
+
+        void Connected();
     }
 }

@@ -1,17 +1,14 @@
 ﻿using AudioSwitcher.AudioApi.CoreAudio;
 using Core;
+using Core.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive;
-using System.Threading;
 
 namespace WindowsService1
 {
-    public class VolumeService : IVolumeService
+    class VolumeService : IVolumeService
     {
 
-        public event EventHandler<ValueEventArgs<string>> ChangeVolume;
+        public event EventHandler<ValueEventArgs<int>> ChangeVolume;
 
         private CoreAudioDevice defaultPlaybackDevice;
 
@@ -31,7 +28,7 @@ namespace WindowsService1
                 {
                     this.systemVolume = (int)device.Volume;
                     defaultPlaybackDevice.Volume = systemVolume;
-                    OnChangeVolume(new ValueEventArgs<string>(systemVolume.ToString()));
+                    OnChangeVolume(new ValueEventArgs<int>(systemVolume));
                     
                 }
             });
@@ -48,7 +45,7 @@ namespace WindowsService1
             systemVolume = value;
         }
 
-        protected virtual void OnChangeVolume(ValueEventArgs<string> e)
+        protected virtual void OnChangeVolume(ValueEventArgs<int> e)
         {
             ChangeVolume?.Invoke(this, e);
         }

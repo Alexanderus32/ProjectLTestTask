@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WindowsService1
+namespace Core
 {
-    interface ICommander
+    public enum ServiceType
     {
-        void Execute(string args);
+        AudioService,
+        LogSevice,
+        DeviceService
     }
 }

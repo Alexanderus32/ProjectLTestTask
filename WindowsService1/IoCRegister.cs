@@ -1,10 +1,5 @@
-﻿using SimpleInjector;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WindowsService1.Interfaces;
+﻿using Core.Interfaces;
+using SimpleInjector;
 
 namespace WindowsService1
 {

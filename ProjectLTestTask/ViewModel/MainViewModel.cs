@@ -1,15 +1,13 @@
 using CommonServiceLocator;
 using Core;
+using Core.Interfaces;
 using Core.NamedPipes;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ProjectLTestTask.Models;
 using System;
 using System.Collections.ObjectModel;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Threading;
 
 namespace ProjectLTestTask.ViewModel
 {
@@ -19,19 +17,21 @@ namespace ProjectLTestTask.ViewModel
 
         private ObservableCollection<string> logs;
 
-        private IClientOberver client;
+        private IVolumeService volumeService;
+        private INotificator notificator;
 
-        public MainViewModel()
+        public MainViewModel(IVolumeService service, INotificator notificator)
         {
-            this.client = ServiceLocator.Current.GetInstance<IClientOberver>();
-            this.client.ChangeVolume += new EventHandler<ValueEventArgs<int>>(SetVolume);
-            this.client.Notify += new EventHandler<ValueEventArgs<string>>(LogMessage);
+            this.volumeService = service;
+            this.notificator = notificator;
+            this.volumeService.ChangeVolume += new EventHandler<ValueEventArgs<int>>(SetVolume);
+            this.notificator.Notify += new EventHandler<ValueEventArgs<string>>(LogMessage);
 
             this.logs = new ObservableCollection<string>();
             ApplyCurrentVolumeCommand = new RelayCommand(ApplyCurrentVolumeMethod);
         }
      
-        public ICommand ApplyCurrentVolumeCommand { get; private set; }
+        public System.Windows.Input.ICommand ApplyCurrentVolumeCommand { get; private set; }
 
         public Volume Volume
         {
@@ -64,7 +64,7 @@ namespace ProjectLTestTask.ViewModel
 
         private void ApplyCurrentVolumeMethod()
         {
-            client.VolumeChangeHandler(this.volume.LocalValue);
+            volumeService.SetVolume(this.volume.LocalValue);
             SetVolume(null, new ValueEventArgs<int>(this.volume.LocalValue));
         }
 

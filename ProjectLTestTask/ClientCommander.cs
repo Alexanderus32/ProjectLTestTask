@@ -1,28 +1,33 @@
-﻿using Core;
+﻿using CommonServiceLocator;
+using Core;
 using Core.Interfaces;
 using Newtonsoft.Json;
+using ProjectLTestTask.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WindowsService1
+namespace ProjectLTestTask
 {
-    class Commander : ICommander
+    class ClientCommander : ICommander
     {
         private IReadOnlyList<ICommand> commands;
 
         private readonly ISend sender;
 
-        public Commander(ISend sender)
+        private readonly INotificator notificator;
+
+        public ClientCommander(ISend sender, INotificator notificator)
         {
             this.sender = sender;
+            this.notificator = notificator;
             InitializeCommands();
         }
 
         private void InitializeCommands()
         {
-            commands = new List<ICommand> { 
-                new AudioCommand(IoCRegister.Container.GetInstance<IVolumeService>())
+            commands = new List<ICommand> {
+                new ClientAudioCommand(ServiceLocator.Current.GetInstance<IVolumeService>()),
             };
         }
 
@@ -30,7 +35,6 @@ namespace WindowsService1
         {
             JsonConverter[] converters = { new MessageConverter() };
             var message = JsonConvert.DeserializeObject<IMessage>(args, new JsonSerializerSettings() { Converters = converters });
-            //IMessage message = null;
             if (message != null)
             {
                 var result = commands.FirstOrDefault(x => x.Type == message.Type)?.Execute(message);
@@ -38,8 +42,13 @@ namespace WindowsService1
                 {
                     this.sender.Send(result);
                 }
+                string serverMessage = $"Server:\n Type:{message.Type}\n";
+                foreach (var item in message.Payload)
+                {
+                    serverMessage += $"{item.Key}: {item.Value}\n";
+                }
+                this.notificator.Log(serverMessage);
             }
-           
         }
     }
 }

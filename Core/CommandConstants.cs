@@ -9,6 +9,7 @@ namespace Core
     public enum CommandConstants
     {
         GetVolume,
+        ReturnVolume,
         AnotherCommand
     }
 }
