@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WindowsService1.Interfaces
 {
-    interface ISend
+    public interface ISend
     {
         PipeStream PipeStream { get; set; }
 

@@ -1,10 +1,12 @@
 ﻿using Core;
 using Core.NamedPipes;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO.Pipes;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ProjectLTestTask
@@ -31,6 +33,12 @@ namespace ProjectLTestTask
 
         public void OnNext(string value)
         {
+            if (value.Contains("{"))
+            {
+                JsonConverter[] converters = { new MessageConverter() };
+                var test = JsonConvert.DeserializeObject<IMessage>(value, new JsonSerializerSettings() { Converters = converters });
+            }
+           
             bool isVolume = int.TryParse(value, out int volume);
             if (isVolume)
             {
@@ -47,12 +55,12 @@ namespace ProjectLTestTask
 
         public void OnCompleted()
         {
-            PipeStream.Write("Completed");
+            //PipeStream.Write("Completed");
         }       
 
         public void OnConnected()
         {
-            PipeStream.Write("Connected");
+           // PipeStream.Write("Connected");
         }
 
         public void Say(string value)

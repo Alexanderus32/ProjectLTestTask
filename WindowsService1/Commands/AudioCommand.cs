@@ -1,8 +1,13 @@
 ﻿using Core;
+using System.Text.Json;
+using System.Collections.Generic;
+using WindowsService1.Interfaces;
+using Newtonsoft.Json;
+using System.Linq;
 
 namespace WindowsService1
 {
-    class AudioCommand : Interfaces.Command
+    class AudioCommand : ICommand
     {
         private readonly IVolumeService volumeService;
 
@@ -11,36 +16,27 @@ namespace WindowsService1
             this.volumeService = volumeService;
         }
 
-        public override CommandConstants[] Commands { get => new CommandConstants[] { CommandConstants.GetVolume };  }
+        public CommandConstants[] Commands { get => new CommandConstants[] { CommandConstants.GetVolume };  }
 
-        public override string Execute(string command)
+        public ServiceType Type => ServiceType.AudioService;
+
+        public string Execute(IMessage command)
         {
-            if(command == CommandConstants.GetVolume.ToString())
+            if(command.Payload.Any(x=>x.Value == CommandConstants.GetVolume.ToString()))
             {
-                var result = this.volumeService.GetCurrentVolume();
-                return result.ToString();
+                var currentVolume = this.volumeService.GetCurrentVolume();
+
+                var dictionary = new Dictionary<string, string> { { "Volume", currentVolume.ToString() } };
+                string json = MessageConverter.CreateJson(new AudioMessage(),  dictionary);
+
+                return json;
             }
             else
             {
-                int.TryParse(command, out int volume);
+                int.TryParse(command.Payload.FirstOrDefault(x=>x.Key == "Volume").Value, out int volume);
                 this.volumeService.SetVolume(volume);
                 return null;
             }
         }
-
-        public override bool IsThisCommand(string args)
-        {
-            var result =  base.IsThisCommand(args);
-            if (result)
-            {
-                return result;
-            }
-            else
-            {
-                result = int.TryParse(args, out int volume);
-            }
-            return result;
-                
-       }
     }
 }

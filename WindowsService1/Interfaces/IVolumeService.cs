@@ -9,7 +9,7 @@ namespace WindowsService1
 {
     public interface IVolumeService
     {
-        event EventHandler<ValueEventArgs<string>> ChangeVolume;
+        event EventHandler<ValueEventArgs<int>> ChangeVolume;
 
         int GetCurrentVolume();
 

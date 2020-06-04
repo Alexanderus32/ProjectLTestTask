@@ -24,7 +24,7 @@ namespace WindowsService1
 
         public void OnNext(string value)
         {
-            this.PipeStream.Write("Client: " + value);
+            //this.sender.Send("Client: " + value);
             this.commander.Execute(value);
         }
 

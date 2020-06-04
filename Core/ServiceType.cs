@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Core
 {
-    public enum CommandConstants
+    public enum ServiceType
     {
-        GetVolume,
-        ReturnVolume,
-        AnotherCommand
+        AudioService,
+        DeviceService
     }
 }

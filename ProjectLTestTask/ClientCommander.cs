@@ -1,21 +1,24 @@
-﻿using Core;
+﻿using CommonServiceLocator;
+using Core;
 using Newtonsoft.Json;
+using ProjectLTestTask.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WindowsService1;
 using WindowsService1.Interfaces;
 
-namespace WindowsService1
+namespace ProjectLTestTask
 {
-    class Commander : ICommander
+    class ClientCommander : ICommander
     {
         private IReadOnlyList<ICommand> commands;
 
         private readonly ISend sender;
 
-        public Commander(ISend sender)
+        public ClientCommander(ISend sender)
         {
             this.sender = sender;
             InitializeCommands();
@@ -23,8 +26,8 @@ namespace WindowsService1
 
         private void InitializeCommands()
         {
-            commands = new List<ICommand> { 
-                new AudioCommand(IoCRegister.Container.GetInstance<IVolumeService>())
+            commands = new List<ICommand> {
+                new ClientAudioCommand(ServiceLocator.Current.GetInstance<IVolumeService>())
             };
         }
 
@@ -32,7 +35,6 @@ namespace WindowsService1
         {
             JsonConverter[] converters = { new MessageConverter() };
             var message = JsonConvert.DeserializeObject<IMessage>(args, new JsonSerializerSettings() { Converters = converters });
-            //IMessage message = null;
             if (message != null)
             {
                 var result = commands.FirstOrDefault(x => x.Type == message.Type)?.Execute(message);
@@ -41,7 +43,7 @@ namespace WindowsService1
                     this.sender.Send(result);
                 }
             }
-           
+
         }
     }
 }

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Core
 {
-    public enum CommandConstants
+    public interface IMessage
     {
-        GetVolume,
-        ReturnVolume,
-        AnotherCommand
+        ServiceType Type { get; set; }
+
+        Dictionary<string, string> Payload { get; set; }
     }
 }

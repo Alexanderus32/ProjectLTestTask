@@ -42,7 +42,9 @@ namespace ProjectLTestTask
         protected override void OnContentRendered(EventArgs e)
         {
             base.OnContentRendered(e);
-            ServiceLocator.Current.GetInstance<IClientOberver>().Say(CommandConstants.GetVolume.ToString());
+            var dictionary = new Dictionary<string, string> { { "Command", CommandConstants.GetVolume.ToString() } };
+            string json = MessageConverter.CreateJson(new AudioMessage(), dictionary);
+            ServiceLocator.Current.GetInstance<IClientOberver>().Say(json);
         }
     }
 }
